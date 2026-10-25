@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaSavers | Clean Water from AI Waste Heat</title>
+  <meta name="description" content="AquaSavers transforms AI and compute waste heat into clean water using Membrane Distillation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💧</text></svg>">
+</head>
+<body>
+
+  <!-- Outer Framed Desktop Wrapper -->
+  <div class="desktop-wrapper">
+    <div class="app-shell">
+
+      <!-- ====================================================================
+           TOP NAVIGATION BAR (Crextio Pill Style)
+           ==================================================================== -->
+      <header class="top-navbar">
+        <!-- Brand Capsule -->
+        <div class="brand-pill">
+          <span class="brand-pill-dot"></span>
+          <span>AquaSavers</span>
+        </div>
+
+        <!-- Segmented Navigation Menu -->
+        <nav class="nav-menu" role="tablist">
+          <button class="nav-link active" data-view="view-monitor" id="nav-btn-monitor">
+            <span>📡</span> Dashboard
+          </button>
+          <button class="nav-link" data-view="view-flow" id="nav-btn-flow">
+            <span>🔄</span> System Flow
+          </button>
+          <button class="nav-link" data-view="view-map" id="nav-btn-map">
+            <span>🇮🇳</span> India Map
+          </button>
+          <button class="nav-link" data-view="view-calculator" id="nav-btn-calculator">
+            <span>🧮</span> Calculator
+          </button>
+          <button class="nav-link" data-view="view-story" id="nav-btn-story">
+            <span>💡</span> How It Works
+          </button>
+          <button class="nav-link" data-view="view-setup" id="nav-btn-setup">
+            <span>🔌</span> Device Setup
+          </button>
+        </nav>
+
+        <!-- Top Right Action Controls -->
+        <div class="top-actions">
+          <button class="btn-connect-pill" id="open-connect-modal-btn">
+            <span>🔌</span> Connect ESP32
+          </button>
+          <button class="icon-circle-btn" title="Settings" id="btn-quick-settings">
+            <span>⚙️</span>
+          </button>
+          <button class="icon-circle-btn" title="Notifications" id="btn-notifications">
+            <span>🔔</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- ====================================================================
+           HERO GREETING & MULTI-SEGMENTED STRIP (Nixtio Style)
+           ==================================================================== -->
+      <section class="hero-greeting-section">
+        <div class="hero-title-row">
+          <h1 class="hero-heading">
+            Welcome to AquaSavers
+          </h1>
+
+          <!-- Global Big Metric Counters -->
+          <div class="global-kpi-rack">
+            <div class="kpi-unit-block">
+              <div class="kpi-icon-pill">💧</div>
+              <div class="kpi-text-stack">
+                <div class="kpi-number" id="nav-total-water">38.2 mL</div>
+                <span class="kpi-sublabel">Clean Water</span>
+              </div>
+            </div>
+
+            <div class="kpi-unit-block">
+              <div class="kpi-icon-pill">🔥</div>
+              <div class="kpi-text-stack">
+                <div class="kpi-number" id="metric-top-temp">56.4°C</div>
+                <span class="kpi-sublabel">Chamber Temp</span>
+              </div>
+            </div>
+
+            <div class="kpi-unit-block">
+              <div class="kpi-icon-pill">⚡</div>
+              <div class="kpi-text-stack">
+                <div class="kpi-number" id="metric-top-watts">450 W</div>
+                <span class="kpi-sublabel">Thermal Load</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3-Stage Process Status Indicator -->
+        <div class="segmented-overview-bar">
+          <div class="process-stage-bar">
+            <span class="process-stage-label">Process Stage:</span>
+            <div class="stage-pills-row">
+              <div class="stage-pill" id="stage-warming">
+                <span class="stage-pill-dot"></span> 1. Warming Up
+              </div>
+              <span class="stage-arrow">→</span>
+              <div class="stage-pill" id="stage-evaporating">
+                <span class="stage-pill-dot"></span> 2. Evaporating
+              </div>
+              <span class="stage-arrow">→</span>
+              <div class="stage-pill" id="stage-condensing">
+                <span class="stage-pill-dot"></span> 3. Condensing
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; align-items: center; gap: 10px;">
+            <div class="pulse-live-badge" id="status-mode-tag">
+              <span class="dot-live"></span> SIMULATED PROTOTYPE FEED
+            </div>
+            <span style="font-size: 0.78rem; color: var(--text-muted);" id="packet-counter">0 readings</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           MAIN VIEWPORT CONTAINER
+           ==================================================================== -->
+      <main class="main-viewport">
+
+        <!-- ====================================================================
+             VIEW 1: LIVE MONITOR (Dashboard)
+             ==================================================================== -->
+        <section class="view-section active" id="view-monitor">
+
+          <!-- 4-Card Crextio Modern Metric Row -->
+          <div class="live-monitor-grid">
+            
+            <!-- 1. Hero Showcase Card -->
+            <div class="lux-card card-hero-showcase">
+              <img src="assets/prototype_concept.jpg" alt="AquaSavers Prototype" class="hero-card-img" onerror="this.style.display='none'; this.parentElement.querySelector('.hero-img-fallback').style.display='flex'">
+              <div class="hero-img-fallback" style="display:none; position:absolute; inset:0; background: linear-gradient(135deg, #23272e 0%, #3d4451 50%, #ffd043 100%); align-items:center; justify-content:center; flex-direction:column; gap:8px;">
+                <span style="font-size:2.5rem;">🧪</span>
+                <span style="color:#fff; font-weight:700; font-size:0.9rem;">MD Chamber Prototype</span>
+                <span style="color:rgba(255,255,255,0.6); font-size:0.75rem;">Santa Monica Beach Water Test</span>
+              </div>
+              <div class="hero-overlay-gradient">
+                <div class="hero-card-name">Membrane Distillation Cell</div>
+                <div class="hero-card-role">Edge AI Thermal Recovery</div>
+              </div>
+              <div class="hero-floating-pill">✨ 99.9% Pure</div>
+            </div>
+
+            <!-- 2. Thermal Spectrum (Vertical Bar Chart) -->
+            <div class="lux-card">
+              <div>
+                <div class="card-top-bar">
+                  <span class="card-title-main">Thermal Spectrum</span>
+                  <button class="action-arrow-btn" title="Inspect">↗</button>
+                </div>
+                <div class="progress-big-val">
+                  <span class="big-stat-number" id="metric-t-source">71.2°C</span>
+                  <span class="big-stat-desc">Server Heat<br>Core Temp</span>
+                </div>
+              </div>
+
+              <!-- Vertical Bars Spectrum: LIVE DATA ONLY (3 sensors) -->
+              <div class="vertical-bars-rack">
+                <div class="bar-col">
+                  <div class="bar-stem" id="bar-stem-source" style="height: 65px;">
+                    <div class="bar-tooltip-pill" id="bar-pill-source">—</div>
+                  </div>
+                  <div class="bar-dot-base" style="background: #ef4444;"></div>
+                  <span class="bar-day-label">Server</span>
+                </div>
+                <div class="bar-col active-peak">
+                  <div class="bar-stem" id="bar-stem-evap" style="height: 55px;">
+                    <div class="bar-tooltip-pill" id="bar-pill-evap">—</div>
+                  </div>
+                  <div class="bar-dot-base" style="background: var(--primary-amber);"></div>
+                  <span class="bar-day-label">Evap</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-stem" id="bar-stem-cond" style="height: 30px;">
+                    <div class="bar-tooltip-pill" id="bar-pill-cond">—</div>
+                  </div>
+                  <div class="bar-dot-base" style="background: #0284c7;"></div>
+                  <span class="bar-day-label">Cond</span>
+                </div>
+              </div>
+              <div style="font-size: 0.7rem; color: var(--text-dim); text-align:center; margin-top: 4px;">Live • DS18B20 sensors • GPIO 4</div>
+            </div>
+
+            <!-- 3. Distillation Tracker (Circular Arc Dial Gauge) -->
+            <div class="lux-card">
+              <div class="card-top-bar">
+                <span class="card-title-main">Distillation Dial</span>
+                <button class="action-arrow-btn" title="Details">↗</button>
+              </div>
+
+              <div class="circular-tracker-container">
+                <svg class="dial-gauge-svg" viewBox="0 0 100 100">
+                  <circle class="dial-track" cx="50" cy="50" r="38" />
+                  <circle class="dial-active-arc" id="dial-active-arc" cx="50" cy="50" r="38"
+                          stroke-dasharray="238.76" stroke-dashoffset="120" />
+                </svg>
+                <div class="dial-center-text">
+                  <span class="dial-val-text" id="metric-dist-rate">18.5</span>
+                  <span class="dial-sub-text">mL / hr</span>
+                </div>
+              </div>
+
+              <div style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 4px;">
+                Est. drops: <strong id="metric-drops" style="color: var(--text-main);">—</strong>
+              </div>
+              <div class="tracker-controls-row">
+                <button class="tracker-ctrl-btn" id="ctrl-btn-play" title="Resume Simulation">▶</button>
+                <button class="tracker-ctrl-btn" id="ctrl-btn-pause" title="Pause Simulation">⏸</button>
+                <button class="tracker-ctrl-btn dark-btn" id="export-telemetry-btn" title="Export CSV Data">💾</button>
+              </div>
+            </div>
+
+            <!-- 4. Water Recovery & Purity Card -->
+            <div class="lux-card">
+              <div>
+                <div class="onboarding-header-row">
+                  <span class="card-title-main">Water Purity</span>
+                  <span class="pct-huge" id="metric-salt-rejection">99.9%</span>
+                </div>
+
+                <div class="segmented-task-bar">
+                  <div class="task-seg task-seg-yellow" id="bar-dist-seg1" style="width: 100%;">Pure</div>
+                </div>
+
+                <div style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.4;">
+                  Dissolved Solids: <strong id="metric-dist-tds" style="color: var(--text-main);">9.8 ppm</strong><br>
+                  Total Recovered: <strong id="metric-dist-total" style="color: #059669;">38.2 mL</strong>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid rgba(0,0,0,0.05); font-size: 0.75rem; color: var(--text-dim); display: flex; justify-content: space-between;">
+                <span>Hydrophobic Barrier</span>
+                <strong style="color: var(--primary-charcoal);">Active</strong>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Split Row: Left Accordion & Charts vs Right Dark Panel -->
+          <!-- Lower Redesign: Trends Grid and System Status -->
+          <div class="monitor-lower-layout">
+            
+            <!-- Left: Trends Grid -->
+            <div class="trends-grid-col">
+              <span class="card-title-main" style="margin-bottom: 12px; display: block;">TEMPERATURE & PRODUCTION TRENDS</span>
+              <div class="trends-grid">
+                
+                <div class="trend-graph-card lux-card">
+                  <div class="trend-header">
+                    <span class="trend-title">Heat Source</span>
+                    <strong class="trend-live-val" id="val-trend-source">—°C</strong>
+                  </div>
+                  <div class="trend-canvas-wrapper">
+                    <canvas id="chart-source"></canvas>
+                  </div>
+                </div>
+
+                <div class="trend-graph-card lux-card">
+                  <div class="trend-header">
+                    <span class="trend-title">Chamber</span>
+                    <strong class="trend-live-val" id="val-trend-evap">—°C</strong>
+                  </div>
+                  <div class="trend-canvas-wrapper">
+                    <canvas id="chart-evap"></canvas>
+                  </div>
+                </div>
+
+                <div class="trend-graph-card lux-card">
+                  <div class="trend-header">
+                    <span class="trend-title">Condenser</span>
+                    <strong class="trend-live-val" id="val-trend-cond">—°C</strong>
+                  </div>
+                  <div class="trend-canvas-wrapper">
+                    <canvas id="chart-cond"></canvas>
+                  </div>
+                </div>
+
+                <div class="trend-graph-card lux-card">
+                  <div class="trend-header">
+                    <span class="trend-title">Water Production</span>
+                    <strong class="trend-live-val" id="val-trend-water">— mL/hr</strong>
+                  </div>
+                  <div class="trend-canvas-wrapper">
+                    <canvas id="chart-water"></canvas>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Right: Live System Status Panel -->
+            <div class="dark-task-panel system-status-panel">
+              <div class="dark-panel-header">
+                <span class="dark-panel-title">Live System Status</span>
+                <span class="pulse-indicator status-live-dot"></span>
+              </div>
+
+              <div class="task-step-list">
+                <div class="task-step-item">
+                  <div class="step-text-stack">
+                    <span class="step-name">ESP32 Connection</span>
+                  </div>
+                  <strong style="font-size: 0.8rem; color: var(--primary-amber);" id="status-esp32">Disconnected</strong>
+                </div>
+
+                <div class="task-step-item">
+                  <div class="step-text-stack">
+                    <span class="step-name">Temperature Sensors</span>
+                  </div>
+                  <strong style="font-size: 0.8rem; color: #10b981;" id="status-sensors">Offline</strong>
+                </div>
+
+                <div class="task-step-item">
+                  <div class="step-text-stack">
+                    <span class="step-name">Water Level</span>
+                  </div>
+                  <strong style="font-size: 0.8rem; color: var(--accent-cyan);" id="status-water-level">Unknown</strong>
+                </div>
+
+                <div class="task-step-item">
+                  <div class="step-text-stack">
+                    <span class="step-name">Pump/Relay Status</span>
+                  </div>
+                  <strong style="font-size: 0.8rem; color: #10b981;" id="status-pump">OFF</strong>
+                </div>
+
+                <div class="task-step-item">
+                  <div class="step-text-stack">
+                    <span class="step-name">Data Feed</span>
+                  </div>
+                  <strong style="font-size: 0.8rem; color: #e2e8f0;" id="status-feed">Offline</strong>
+                </div>
+
+                <div class="task-step-item" style="border-bottom: none;">
+                  <div class="step-text-stack">
+                    <span class="step-name">Last Update</span>
+                  </div>
+                  <strong style="font-size: 0.8rem; color: #94a3b8; font-family: monospace;" id="status-time">--:--:--</strong>
+                </div>
+              </div>
+
+              <!-- Live Activity Log -->
+              <div style="margin-top: 16px;">
+                <span style="font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.7); display: block; margin-bottom: 6px;">Live Prototype Activity Log</span>
+                <div class="dark-activity-terminal" id="activity-terminal">
+                  <div class="log-entry"><span class="time">[INIT]</span> AquaSavers luxury dashboard ready.</div>
+                  <div class="log-entry log-highlight"><span class="time">[INFO]</span> Thermal energy transferring at 450W.</div>
+                  <div class="log-entry log-success"><span class="time">[STATUS]</span> Membrane distillation flux active.</div>
+                </div>
+              </div>
+
+              <!-- Controls inside Dark Panel -->
+              <div style="background: var(--bg-card-dark-inner); border-radius: var(--radius-sm); padding: 12px; border: var(--border-dark-card); margin-top: 16px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.78rem;">
+                  <span>Adjust Compute Power</span>
+                  <strong style="color: var(--primary-amber);" id="sim-power-val">450 W</strong>
+                </div>
+                <input type="range" id="sim-power-slider" min="100" max="1000" step="25" value="450">
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW 2: SYSTEM FLOW
+             ==================================================================== -->
+        <section class="view-section" id="view-flow">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title"><span>🔄</span> System Flow Simulation</h2>
+              <p class="view-subtitle">Interactive 60-FPS animated diagram of the closed-loop membrane distillation recovery cycle.</p>
+            </div>
+          </div>
+
+          <div class="flow-canvas-card">
+            <canvas id="cycle-canvas" class="flow-canvas-element"></canvas>
+          </div>
+
+          <div class="stage-explanation-box">
+            <div>
+              <h3 class="card-title-main" id="inspector-title" style="margin-bottom: 0.5rem;">Step 3: Membrane Distillation Chamber</h3>
+              <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.6;" id="inspector-desc">
+                Salty or dirty feedwater is heated by processor waste energy. Vapor passes through the microporous hydrophobic membrane into the cold condensation chamber.
+              </p>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div class="impact-card">
+                <span class="impact-title">Chamber Temperature</span>
+                <strong class="impact-big-value" id="inspector-stat1" style="font-size: 1.25rem;">56.4°C</strong>
+              </div>
+              <div class="impact-card">
+                <span class="impact-title">Purity Action</span>
+                <strong class="impact-big-value" id="inspector-stat2" style="font-size: 1.25rem; color: #059669;">Salt Separated</strong>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW 3: INDIA DATA CENTER IMPACT MAP
+             ==================================================================== -->
+        <section class="view-section" id="view-map">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title"><span>🇮🇳</span> National AI Data Center & Water Impact Map</h2>
+              <p class="view-subtitle">Real verified hyperscale data center hubs across India, thermodynamic heat dissipation, and clean water recovery potential.</p>
+            </div>
+          </div>
+
+          <div id="india-map-root"></div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW 4: IMPACT CALCULATOR
+             ==================================================================== -->
+        <section class="view-section" id="view-calculator">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title"><span>🧮</span> Scalability Impact Calculator</h2>
+              <p class="view-subtitle">Estimate clean water yields and cooling water savings across edge compute nodes to hyperscale data centers.</p>
+            </div>
+          </div>
+
+          <div class="calculator-grid">
+            <div class="lux-card">
+              <span class="card-title-main" style="margin-bottom: 1.5rem;">Compute Sizing</span>
+
+              <div class="control-group">
+                <div class="control-label-bar">
+                  <span>Server Power Load</span>
+                  <strong id="calc-server-power-val" style="color: var(--primary-charcoal);">10 kW</strong>
+                </div>
+                <input type="range" id="calc-server-power" min="1" max="1000" step="5" value="10">
+                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-dim); margin-top: 4px;">
+                  <span>1 kW (Edge Server)</span>
+                  <span>50 kW (Enterprise)</span>
+                  <span>1 MW (Hyperscale)</span>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <div class="control-label-bar">
+                  <span>Distillation Architecture</span>
+                </div>
+                <select class="dropdown-select" id="calc-tech-type">
+                  <option value="membrane" selected>Direct Contact Membrane Distillation (DCMD)</option>
+                  <option value="vacuum">Vacuum Assisted Membrane Distillation (VMD)</option>
+                  <option value="atmospheric">Atmospheric Thermal Distillation</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="lux-card">
+              <span class="card-title-main" style="margin-bottom: 1rem;">Projected Water Yields</span>
+
+              <div class="impact-results-grid">
+                <div class="impact-card">
+                  <span class="impact-title">Clean Water / Day</span>
+                  <div class="impact-big-value" id="result-dist-day" style="color: #0284c7;">96 Liters</div>
+                  <span class="impact-note">Recovered from thermal dissipation</span>
+                </div>
+
+                <div class="impact-card">
+                  <span class="impact-title">Clean Water / Year</span>
+                  <div class="impact-big-value" id="result-dist-year" style="color: #059669;">35,040 Liters</div>
+                  <span class="impact-note">Potable standard</span>
+                </div>
+
+                <div class="impact-card">
+                  <span class="impact-title">Cooling Water Saved</span>
+                  <div class="impact-big-value" id="result-cooling-wasted" style="color: #ef4444;">504 Liters/day</div>
+                  <span class="impact-note">Evaporation eliminated</span>
+                </div>
+
+                <div class="impact-card">
+                  <span class="impact-title">Net Advantage</span>
+                  <div class="impact-big-value" id="result-net-saved" style="color: #d97706;">219,000 L/yr</div>
+                  <span class="impact-note">Combined impact</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW 5: HOW IT WORKS (Story)
+             ==================================================================== -->
+        <section class="view-section" id="view-story">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title"><span>💡</span> How It Works: Compute ➔ Heat ➔ Water</h2>
+              <p class="view-subtitle">Transforming AI server waste heat into clean, potable water using thermodynamics and hydrophobic membranes.</p>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; align-items: start;">
+            <div class="lux-card" style="padding: 0; overflow: hidden;">
+              <div style="position:relative; width:100%; height:320px; background: linear-gradient(135deg, #23272e 0%, #3d4451 60%, #ffd043 100%);">  
+                <img src="assets/prototype_concept.jpg" alt="Physical Prototype" style="width: 100%; height: 320px; object-fit: cover; position:absolute; top:0; left:0;" onerror="this.style.display='none'">
+                <div class="hero-img-fallback" style="display:flex; position:absolute; inset:0; align-items:center; justify-content:center; flex-direction:column; gap:8px; pointer-events:none;">
+                  <span style="font-size:3rem;">🧪</span>
+                  <span style="color:#fff; font-weight:700;">MD Chamber Prototype</span>
+                  <span style="color:rgba(255,255,255,0.6); font-size:0.8rem;">Santa Monica Beach — Seawater Test</span>
+                </div>
+              </div>
+              <div style="padding: 1.5rem;">
+                <h3 class="card-title-main" style="margin-bottom: 0.5rem;">The Physical Prototype</h3>
+                <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.6;">
+                  Our benchtop unit demonstrates that compute waste heat from an ESP32-controlled system can directly power Membrane Distillation. Hot saline water (from Santa Monica Beach) vaporizes through a PTFE membrane and condenses into clean water on the cold side.
+                </p>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div class="lux-card">
+                <h4 style="font-size: 1rem; font-weight: 700; margin-bottom: 4px;">1. AI Compute creates Heat ($q = mc\Delta T$)</h4>
+                <p style="font-size: 0.82rem; color: var(--text-muted);">Processors expel thermal energy under heavy inference workloads.</p>
+              </div>
+              <div class="lux-card">
+                <h4 style="font-size: 1rem; font-weight: 700; margin-bottom: 4px;">2. Hermetic Liquid Loop Transfers Energy</h4>
+                <p style="font-size: 0.82rem; color: var(--text-muted);">Closed-loop fluid circulation moves heat directly to the distillation chamber without evaporating cooling water.</p>
+              </div>
+              <div class="lux-card">
+                <h4 style="font-size: 1rem; font-weight: 700; margin-bottom: 4px;">3. Vapor Pressure Gradient Drives Flux ($J = C_m\Delta P$)</h4>
+                <p style="font-size: 0.82rem; color: var(--text-muted);">Pure vapor penetrates the hydrophobic pores while salts and contaminants are 100% rejected.</p>
+              </div>
+              <div class="lux-card">
+                <h4 style="font-size: 1rem; font-weight: 700; margin-bottom: 4px;">4. Clean Distillate Condensation</h4>
+                <p style="font-size: 0.82rem; color: var(--text-muted);">Vapor meets the cold sink and condenses into fresh, usable clean water.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW 6: DEVICE SETUP (ESP32)
+             ==================================================================== -->
+        <section class="view-section" id="view-setup">
+          <div class="view-header">
+            <div>
+              <h2 class="view-title"><span>🔌</span> ESP32 Hardware Wiring & Bridge</h2>
+              <p class="view-subtitle">Pinouts, sensor configuration, and ready-to-flash Arduino firmware for your physical unit.</p>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+            <div class="lux-card">
+              <span class="card-title-main" style="margin-bottom: 1rem;">Wiring Map</span>
+              <div class="task-step-list">
+                <div class="task-step-item">
+                  <div class="step-text-stack">
+                    <span class="step-name">DS18B20 Probes (Temp)</span>
+                    <span class="step-time">GPIO 4 • 4.7kΩ Pullup</span>
+                  </div>
+                  <strong style="font-size: 0.8rem; color: var(--primary-amber);">GPIO 4</strong>
+                </div>
+                <div class="task-step-item">
+                  <div class="step-text-stack">
+                    <span class="step-name">Flow / Drop Sensor</span>
+                    <span class="step-time">GPIO 5 • Pulse Counter</span>
+                  </div>
+                  <strong style="font-size: 0.8rem; color: var(--accent-cyan);">GPIO 5</strong>
+                </div>
+                <div class="task-step-item">
+                  <div class="step-text-stack">
+                    <span class="step-name">TDS Purity Sensor</span>
+                    <span class="step-time">GPIO 34 • Analog ADC</span>
+                  </div>
+                  <strong style="font-size: 0.8rem; color: #10b981;">GPIO 34</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="lux-card">
+              <span class="card-title-main" style="margin-bottom: 1rem;">Firmware Sketch</span>
+              <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem;">
+                The complete ESP32 sketch is ready in your project directory: <code>firmware/esp32_aquasavers.ino</code>. It streams live JSON telemetry over USB Serial (115200 baud) or Wi-Fi.
+              </p>
+              <button class="btn-connect-pill" id="setup-connect-trigger-btn">
+                <span>🔌</span> Launch Connection Wizard
+              </button>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- ====================================================================
+           MODAL: ESP32 CONNECTION WIZARD
+           ==================================================================== -->
+      <div class="modal-overlay" id="connect-modal">
+        <div class="modal-window">
+          <div class="modal-head">
+            <h3>Connect Real ESP32</h3>
+            <button class="modal-close-btn" id="close-modal-btn">&times;</button>
+          </div>
+
+          <div class="conn-choice-card">
+            <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 4px;">🔌 Connect over USB (WebSerial)</h4>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px;">Connect your ESP32 board directly via USB cable at 115200 baud:</p>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <button class="btn-connect-pill" id="btn-connect-usb">Select Serial Port</button>
+            </div>
+
+            <!-- In-Modal Troubleshooting Accordion -->
+            <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed rgba(0,0,0,0.08); font-size: 0.78rem;">
+              <details style="cursor: pointer;">
+                <summary style="font-weight: 700; color: #0284c7;">⚠️ "No compatible device found" / No port showing?</summary>
+                <div style="margin-top: 8px; line-height: 1.5; color: var(--text-muted); background: #ffffff; padding: 8px 10px; border-radius: 6px; border: var(--border-subtle);">
+                  <p><strong>1. Missing Driver (Most Common):</strong> Install the <a href="https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers" target="_blank" style="color: #0284c7; font-weight: 600;">CP210x Driver</a> or <a href="http://www.wch-ic.com/downloads/CH341SER_EXE.html" target="_blank" style="color: #0284c7; font-weight: 600;">CH340 Driver</a>.</p>
+                  <p><strong>2. Charge-Only Cable:</strong> Use a data-sync USB cable (not just a charging cord).</p>
+                  <p><strong>3. Port Locked:</strong> Close the Arduino IDE Serial Monitor if it's open.</p>
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <div class="conn-choice-card">
+            <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 4px;">📶 Connect over Wi-Fi</h4>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px;">Connect your laptop/phone to the ESP32 Wi-Fi (<code>AquaSavers-AP</code>):</p>
+            <div class="input-join">
+              <input type="text" class="input-box" id="wifi-ip-box" placeholder="192.168.4.1" value="192.168.4.1">
+              <button class="btn-secondary" id="btn-connect-wifi">Connect Wi-Fi</button>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+            <button class="btn-revert" id="btn-revert-sim">Switch to Simulator</button>
+            <button class="btn-secondary" id="cancel-modal-btn">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toast Rack -->
+      <div class="toast-rack" id="toast-rack"></div>
+
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/physics.js"></script>
+  <script src="js/hardware-simulator.js"></script>
+  <script src="js/esp32-bridge.js"></script>
+  <script src="js/telemetry-dashboard.js"></script>
+  <script src="js/cycle-visualizer.js"></script>
+  <script src="js/india-map.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
